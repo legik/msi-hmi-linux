@@ -1,0 +1,10 @@
+#!/bin/sh
+# systemd sleep hook for hmid: /usr/lib/systemd/system-sleep/hmid
+# $1 = pre|post, $2 = suspend|hibernate|hybrid-sleep|suspend-then-hibernate
+HMICTL=/usr/bin/hmictl
+case "$1/$2" in
+    pre/hibernate)  "$HMICTL" hibernate ;;
+    pre/*)          "$HMICTL" sleep ;;
+    post/*)         "$HMICTL" wake ;;
+esac
+exit 0

@@ -1,0 +1,12 @@
+{
+ "type": "Feature",
+ "properties": {
+  "body_id": "sun",
+  "sunrise": {
+   "time": "2026-10-18T05:32+00:00"
+  },
+  "sunset": {
+   "time": "2026-10-18T16:12+00:00"
+  }
+ }
+}

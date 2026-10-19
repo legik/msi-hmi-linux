@@ -1,0 +1,47 @@
+# Maintainer: Your Name <you@example.com>
+pkgname=msi-hmi-linux
+pkgver=0.2.0
+pkgrel=1
+pkgdesc="Linux service for the MSI HMI 2.0 front-panel touch display (MEG Trident X2)"
+arch=('any')
+url="https://github.com/legik/msi-hmi-linux"
+license=('GPL-3.0-or-later')
+depends=('python' 'python-pyusb' 'python-pillow' 'ttf-dejavu')
+makedepends=('python-build' 'python-installer' 'python-setuptools' 'python-wheel')
+checkdepends=('python-pytest')
+optdepends=('pipewire: volume and microphone buttons (wpctl)'
+            'playerctl: music buttons and the now-playing screen'
+            'libnotify: countdown timer notification'
+            'sound-theme-freedesktop: countdown timer alarm sound'
+            'mangohud: FPS while gaming'
+            'dmidecode: RAM clock reading'
+            'ffmpeg: animated pictures (GIF / video)')
+install=hmid.install
+source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+build() {
+    cd "$pkgname-$pkgver"
+    python -m build --wheel --no-isolation
+}
+
+check() {
+    cd "$pkgname-$pkgver"
+    PYTHONPATH=src python -m pytest -q
+}
+
+package() {
+    cd "$pkgname-$pkgver"
+    python -m installer --destdir="$pkgdir" dist/*.whl
+    install -Dm644 packaging/systemd/hmid.service "$pkgdir/usr/lib/systemd/system/hmid.service"
+    install -Dm644 packaging/systemd/hmid-helper.service "$pkgdir/usr/lib/systemd/system/hmid-helper.service"
+    install -Dm755 packaging/systemd/hmid-sleep "$pkgdir/usr/lib/systemd/system-sleep/hmid"
+    install -Dm644 packaging/sysusers/hmid.conf "$pkgdir/usr/lib/sysusers.d/hmid.conf"
+    install -Dm644 packaging/udev/70-hmid.rules "$pkgdir/usr/lib/udev/rules.d/70-hmid.rules"
+    install -Dm644 packaging/completions/_hmictl "$pkgdir/usr/share/zsh/site-functions/_hmictl"
+    install -Dm644 packaging/completions/hmictl.bash "$pkgdir/usr/share/bash-completion/completions/hmictl"
+    install -Dm644 examples/hmid.json "$pkgdir/usr/share/doc/$pkgname/hmid.json.example"
+    install -Dm644 README.md -t "$pkgdir/usr/share/doc/$pkgname/"
+    install -dm755 "$pkgdir/etc/hmid/layouts"
+    cp -r docs "$pkgdir/usr/share/doc/$pkgname/"
+}

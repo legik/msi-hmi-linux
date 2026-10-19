@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "msi-hmi-linux"
+dynamic = ["version"]
+description = "Linux service for the MSI HMI 2.0 front-panel touch display (MEG Trident X2)"
+readme = "README.md"
+license = { text = "GPL-3.0-or-later" }
+requires-python = ">=3.10"
+dependencies = ["pyusb>=1.2", "Pillow>=9.2"]
+keywords = ["msi", "trident", "hmi", "lcd", "touch panel", "mystic light", "linux"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Environment :: No Input/Output (Daemon)",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: System :: Hardware :: Hardware Drivers",
+    "Topic :: System :: Monitoring",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "ruff>=0.4", "build"]
+
+[project.scripts]
+hmid = "hmid.cli:main_daemon"
+hmictl = "hmid.cli:main_ctl"
+hmid-helper = "hmid.helper:main"
+
+[project.urls]
+Homepage = "https://github.com/legik/msi-hmi-linux"
+Issues = "https://github.com/legik/msi-hmi-linux/issues"
+
+[tool.setuptools.dynamic]
+version = { attr = "hmid.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+hmid = ["data/*.mp4", "data/layouts/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 130
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "I"]
+ignore = ["E731", "B905"]

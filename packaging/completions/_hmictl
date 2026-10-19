@@ -1,0 +1,60 @@
+#compdef hmictl
+# zsh completion for hmictl (installed to /usr/share/zsh/site-functions/_hmictl).
+# Layout, theme and effect names come from "hmictl _complete", which needs no service or sudo.
+
+_hmictl_words() {
+    local -a out
+    out=(${(f)"$(hmictl _complete $1 2>/dev/null)"})
+    print -rl -- $out
+}
+
+_hmictl() {
+    local -a words_
+    if (( CURRENT == 2 )); then
+        words_=(${(f)"$(_hmictl_words commands)"})
+        _describe -t commands 'hmictl command' words_
+        return
+    fi
+    case $words[2] in
+        layout|customize)
+            (( CURRENT == 3 )) && compadd -- ${(f)"$(_hmictl_words layouts)"} ;;
+        theme)
+            (( CURRENT == 3 )) && compadd -- next prev ${(f)"$(_hmictl_words themes)"} ;;
+        hwmon)
+            (( CURRENT == 3 )) && compadd -- list multi ;;
+        get|unset)
+            (( CURRENT == 3 )) && compadd -- ${(f)"$(_hmictl_words settings)"} ;;
+        set)
+            if (( CURRENT == 3 )); then
+                compadd -- ${(f)"$(_hmictl_words settings)"}
+            elif (( CURRENT == 4 )); then
+                compadd -- ${(f)"$(_hmictl_words values:$words[3])"}
+            fi ;;
+        brightness)
+            (( CURRENT == 3 )) && compadd -- 0 25 50 75 100 ;;
+        light)
+            if (( CURRENT == 3 )); then
+                words_=(${(f)"$(_hmictl_words lights)"})
+                _describe -t effects 'effect' words_
+            else
+                _message 'colour as RRGGBB'
+            fi ;;
+        picture)
+            if [[ $words[3] == builtin ]]; then
+                (( CURRENT == 4 )) && compadd -- 0 1 2 3 4 5
+            else
+                _alternative 'options:option:(fill fit stretch rotate builtin)' 'files:picture:_files'
+            fi ;;
+        check)
+            _files -g '*.json' ;;
+        preview|preview-themes)
+            if (( CURRENT == 3 )); then
+                _files
+            elif (( CURRENT == 4 )); then
+                _alternative "screens:screen:(stats multi ${(f)"$(_hmictl_words layouts)"})" \
+                             'files:layout file:_files -g "*.json"'
+            fi ;;
+    esac
+}
+
+_hmictl "$@"

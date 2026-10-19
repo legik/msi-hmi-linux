@@ -1,0 +1,33 @@
+{
+  "comment": "World clock: your time and four cities. One command prints each city's time, day and UTC offset on its own lines; line(n) picks them. Change the cities in the command (names from timedatectl list-timezones) and the labels. Copy the file to /etc/hmid/layouts first.",
+  "refresh": 15,
+  "sources": {
+    "zones": {"type": "command", "every": 15,
+              "run": "for z in America/New_York Europe/London Asia/Tokyo Australia/Sydney; do TZ=$z date '+%H:%M%n%a, UTC%:z'; done"}
+  },
+  "widgets": [
+    {"type": "text", "x": 240, "y": 24, "text": "{time:%H:%M}", "size": 112, "align": "center", "spacing": -2},
+    {"type": "text", "x": 240, "y": 156, "text": "{time:%A, %d %B}", "size": 22, "align": "center", "bold": false, "color": "secondary"},
+    {"type": "divider", "y": 204},
+
+    {"type": "card", "x": 16, "y": 220, "w": 448, "h": 130},
+    {"type": "text", "x": 34, "y": 248, "text": "New York", "size": 28},
+    {"type": "text", "x": 34, "y": 292, "text": "{zones|line(1)}", "size": 17, "bold": false, "color": "secondary"},
+    {"type": "text", "x": 446, "y": 248, "text": "{zones|line(0)}", "size": 62, "align": "right", "color": "value"},
+
+    {"type": "card", "x": 16, "y": 360, "w": 448, "h": 130},
+    {"type": "text", "x": 34, "y": 388, "text": "London", "size": 28},
+    {"type": "text", "x": 34, "y": 432, "text": "{zones|line(3)}", "size": 17, "bold": false, "color": "secondary"},
+    {"type": "text", "x": 446, "y": 388, "text": "{zones|line(2)}", "size": 62, "align": "right", "color": "value"},
+
+    {"type": "card", "x": 16, "y": 500, "w": 448, "h": 130},
+    {"type": "text", "x": 34, "y": 528, "text": "Tokyo", "size": 28},
+    {"type": "text", "x": 34, "y": 572, "text": "{zones|line(5)}", "size": 17, "bold": false, "color": "secondary"},
+    {"type": "text", "x": 446, "y": 528, "text": "{zones|line(4)}", "size": 62, "align": "right", "color": "value"},
+
+    {"type": "card", "x": 16, "y": 640, "w": 448, "h": 130},
+    {"type": "text", "x": 34, "y": 668, "text": "Sydney", "size": 28},
+    {"type": "text", "x": 34, "y": 712, "text": "{zones|line(7)}", "size": 17, "bold": false, "color": "secondary"},
+    {"type": "text", "x": 446, "y": 668, "text": "{zones|line(6)}", "size": 62, "align": "right", "color": "value"}
+  ]
+}

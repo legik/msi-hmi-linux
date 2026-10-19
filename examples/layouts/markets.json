@@ -1,0 +1,47 @@
+{
+  "comment": "Markets: Bitcoin, Ethereum and Solana from CoinGecko with 24-hour change and a price graph, and exchange rates from open.er-api.com. Both are free and need no key. Change the coin ids (coingecko.com/en/api) and currencies as you like.",
+  "refresh": 30,
+  "sources": {
+    "coins": {"type": "http", "every": 300,
+              "url": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true"},
+    "fx":    {"type": "http", "every": 3600, "url": "https://open.er-api.com/v6/latest/USD"}
+  },
+  "widgets": [
+    {"type": "text", "x": 24, "y": 22, "text": "MARKETS", "size": 22, "color": "header", "spacing": 3},
+    {"type": "text", "x": 456, "y": 18, "text": "{time:%H:%M}", "size": 26, "align": "right"},
+    {"type": "divider", "y": 62},
+
+    {"type": "card", "x": 16, "y": 76, "w": 448, "h": 170},
+    {"type": "text", "x": 34, "y": 92, "text": "BITCOIN", "color": "header"},
+    {"type": "text", "x": 446, "y": 95, "text": "▲ {coins.bitcoin.usd_24h_change:.2f}%  24 h", "size": 17, "align": "right", "color": "accent", "when": "coins.bitcoin.usd_24h_change>=0"},
+    {"type": "text", "x": 446, "y": 95, "text": "▼ {coins.bitcoin.usd_24h_change|mul(-1):.2f}%  24 h", "size": 17, "align": "right", "color": "crit", "when": "coins.bitcoin.usd_24h_change<0"},
+    {"type": "text", "x": 34, "y": 120, "text": "$ {coins.bitcoin.usd:,.0f}", "size": 48, "color": "value"},
+    {"type": "graph", "x": 16, "y": 196, "w": 448, "h": 50, "value": "coins.bitcoin.usd", "seconds": 86400, "min": "coins.bitcoin.usd|mul(0.97)", "clip": true},
+    {"type": "card", "x": 16, "y": 76, "w": 448, "h": 170, "fill": false},
+
+    {"type": "card", "x": 16, "y": 256, "w": 448, "h": 170},
+    {"type": "text", "x": 34, "y": 272, "text": "ETHEREUM", "color": "header"},
+    {"type": "text", "x": 446, "y": 275, "text": "▲ {coins.ethereum.usd_24h_change:.2f}%  24 h", "size": 17, "align": "right", "color": "accent", "when": "coins.ethereum.usd_24h_change>=0"},
+    {"type": "text", "x": 446, "y": 275, "text": "▼ {coins.ethereum.usd_24h_change|mul(-1):.2f}%  24 h", "size": 17, "align": "right", "color": "crit", "when": "coins.ethereum.usd_24h_change<0"},
+    {"type": "text", "x": 34, "y": 300, "text": "$ {coins.ethereum.usd:,.0f}", "size": 48, "color": "value"},
+    {"type": "graph", "x": 16, "y": 376, "w": 448, "h": 50, "value": "coins.ethereum.usd", "seconds": 86400, "min": "coins.ethereum.usd|mul(0.97)", "clip": true},
+    {"type": "card", "x": 16, "y": 256, "w": 448, "h": 170, "fill": false},
+
+    {"type": "card", "x": 16, "y": 436, "w": 448, "h": 170},
+    {"type": "text", "x": 34, "y": 452, "text": "SOLANA", "color": "header"},
+    {"type": "text", "x": 446, "y": 455, "text": "▲ {coins.solana.usd_24h_change:.2f}%  24 h", "size": 17, "align": "right", "color": "accent", "when": "coins.solana.usd_24h_change>=0"},
+    {"type": "text", "x": 446, "y": 455, "text": "▼ {coins.solana.usd_24h_change|mul(-1):.2f}%  24 h", "size": 17, "align": "right", "color": "crit", "when": "coins.solana.usd_24h_change<0"},
+    {"type": "text", "x": 34, "y": 480, "text": "$ {coins.solana.usd:,.2f}", "size": 48, "color": "value"},
+    {"type": "graph", "x": 16, "y": 556, "w": 448, "h": 50, "value": "coins.solana.usd", "seconds": 86400, "min": "coins.solana.usd|mul(0.97)", "clip": true},
+    {"type": "card", "x": 16, "y": 436, "w": 448, "h": 170, "fill": false},
+
+    {"type": "card", "x": 16, "y": 616, "w": 448, "h": 164},
+    {"type": "text", "x": 34, "y": 632, "text": "1 USD", "color": "header"},
+    {"type": "text", "x": 34, "y": 676, "text": "EUR", "size": 15, "bold": false, "color": "secondary"},
+    {"type": "text", "x": 34, "y": 700, "text": "{fx.rates.EUR:.3f}", "size": 32},
+    {"type": "text", "x": 180, "y": 676, "text": "GBP", "size": 15, "bold": false, "color": "secondary"},
+    {"type": "text", "x": 180, "y": 700, "text": "{fx.rates.GBP:.3f}", "size": 32},
+    {"type": "text", "x": 326, "y": 676, "text": "RUB", "size": 15, "bold": false, "color": "secondary"},
+    {"type": "text", "x": 326, "y": 700, "text": "{fx.rates.RUB:.2f}", "size": 32}
+  ]
+}

@@ -1,0 +1,6 @@
+# hmid runs as its own user: give its group the panel and the Mystic Light controller, and
+# nothing else.
+# MSI HMI 2.0 front panel (MEG Trident X2), driven over USB (libusb)
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="1462", ATTR{idProduct}=="922c", GROUP="hmid", MODE="0660"
+# Mystic Light controller, driven over hidraw
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1462", ATTRS{idProduct}=="931b", GROUP="hmid", MODE="0660"

@@ -1,0 +1,41 @@
+{
+  "comment": "Network: download and upload with 2-minute graphs, ping to 1.1.1.1 with a 10-minute graph, the PC's own address and the public one. Ping and the local address are commands, so copy the file to /etc/hmid/layouts (root-owned) first.",
+  "refresh": 2,
+  "sources": {
+    "ping":      {"type": "command", "run": "ping -c 1 -W 1 1.1.1.1 | awk -F'time=' '/time=/ {print $2 + 0}'", "every": 5},
+    "ip":        {"type": "command", "run": "ip -4 route get 1.1.1.1 | awk '{for (i = 1; i < NF; i++) if ($i == \"src\") print $(i + 1)}'", "every": 60},
+    "public_ip": {"type": "http", "url": "https://api.ipify.org", "every": 3600}
+  },
+  "widgets": [
+    {"type": "text", "x": 24, "y": 22, "text": "NETWORK", "size": 22, "color": "header", "spacing": 3},
+    {"type": "text", "x": 456, "y": 18, "text": "{time:%H:%M}", "size": 26, "align": "right"},
+    {"type": "divider", "y": 62},
+
+    {"type": "card", "x": 16, "y": 76, "w": 448, "h": 196},
+    {"type": "text", "x": 34, "y": 92, "text": "↓  DOWNLOAD", "color": "header"},
+    {"type": "text", "x": 34, "y": 122, "text": "{download}", "size": 54, "color": "value"},
+    {"type": "graph", "x": 16, "y": 196, "w": 448, "h": 76, "value": "net_down", "seconds": 120, "min": 0, "clip": true},
+    {"type": "card", "x": 16, "y": 76, "w": 448, "h": 196, "fill": false},
+
+    {"type": "card", "x": 16, "y": 282, "w": 448, "h": 196},
+    {"type": "text", "x": 34, "y": 298, "text": "↑  UPLOAD", "color": "header"},
+    {"type": "text", "x": 34, "y": 328, "text": "{upload}", "size": 54, "color": "value"},
+    {"type": "graph", "x": 16, "y": 402, "w": 448, "h": 76, "value": "net_up", "seconds": 120, "min": 0, "clip": true, "color": "accent_dark"},
+    {"type": "card", "x": 16, "y": 282, "w": 448, "h": 196, "fill": false},
+
+    {"type": "card", "x": 16, "y": 488, "w": 448, "h": 156},
+    {"type": "text", "x": 34, "y": 504, "text": "PING", "color": "header"},
+    {"type": "text", "x": 446, "y": 507, "text": "1.1.1.1  ·  10 min", "size": 17, "align": "right", "bold": false, "color": "secondary"},
+    {"type": "text", "x": 34, "y": 532, "text": "{ping:.0f}", "size": 50, "value": "ping", "warn": 50, "crit": 120, "suffix": "ms"},
+    {"type": "text", "x": 34, "y": 532, "text": "offline", "size": 50, "color": "crit", "when": "!ping"},
+    {"type": "graph", "x": 16, "y": 594, "w": 448, "h": 50, "value": "ping", "seconds": 600, "min": 0, "clip": true},
+    {"type": "card", "x": 16, "y": 488, "w": 448, "h": 156, "fill": false},
+
+    {"type": "card", "x": 16, "y": 654, "w": 448, "h": 126},
+    {"type": "text", "x": 34, "y": 670, "text": "ADDRESSES", "color": "header"},
+    {"type": "text", "x": 34, "y": 708, "text": "THIS PC", "size": 15, "bold": false, "color": "secondary"},
+    {"type": "text", "x": 34, "y": 730, "text": "{ip}", "size": 26},
+    {"type": "text", "x": 250, "y": 708, "text": "PUBLIC", "size": 15, "bold": false, "color": "secondary"},
+    {"type": "text", "x": 250, "y": 730, "text": "{public_ip}", "size": 26}
+  ]
+}

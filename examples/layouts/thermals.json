@@ -1,0 +1,31 @@
+{
+  "comment": "Cooling: CPU and GPU temperature with 5-minute graphs, VRM, and every fan and the pump. Fans and VRM need the board sensor driver (docs/HARDWARE.md).",
+  "refresh": 3,
+  "widgets": [
+    {"type": "text", "x": 24, "y": 22, "text": "COOLING", "size": 22, "color": "header", "spacing": 3},
+    {"type": "text", "x": 456, "y": 18, "text": "{time:%H:%M}", "size": 26, "align": "right"},
+    {"type": "divider", "y": 62},
+
+    {"type": "card", "x": 16, "y": 76, "w": 448, "h": 150},
+    {"type": "text", "x": 34, "y": 92, "text": "CPU", "color": "header"},
+    {"type": "text", "x": 446, "y": 95, "text": "{cpu_load:.0f}%  ·  {cpu_power:.0f} W", "size": 17, "align": "right", "bold": false, "color": "secondary"},
+    {"type": "text", "x": 34, "y": 116, "text": "{cpu_temp:.0f}", "size": 52, "value": "cpu_temp", "rule": "temp", "suffix": "°C"},
+    {"type": "text", "x": 446, "y": 136, "text": "5 min", "size": 15, "align": "right", "bold": false, "color": "secondary"},
+    {"type": "graph", "x": 16, "y": 176, "w": 448, "h": 50, "value": "cpu_temp", "seconds": 300, "min": 30, "max": 100, "clip": true},
+    {"type": "card", "x": 16, "y": 76, "w": 448, "h": 150, "fill": false},
+
+    {"type": "card", "x": 16, "y": 236, "w": 448, "h": 150},
+    {"type": "text", "x": 34, "y": 252, "text": "GPU", "color": "header"},
+    {"type": "text", "x": 446, "y": 255, "text": "{gpu_load:.0f}%  ·  {gpu_power:.0f} W", "size": 17, "align": "right", "bold": false, "color": "secondary"},
+    {"type": "text", "x": 34, "y": 276, "text": "{gpu_temp:.0f}", "size": 52, "value": "gpu_temp", "rule": "temp", "suffix": "°C"},
+    {"type": "text", "x": 446, "y": 296, "text": "5 min", "size": 15, "align": "right", "bold": false, "color": "secondary"},
+    {"type": "graph", "x": 16, "y": 336, "w": 448, "h": 50, "value": "gpu_temp", "seconds": 300, "min": 30, "max": 100, "clip": true},
+    {"type": "card", "x": 16, "y": 236, "w": 448, "h": 150, "fill": false},
+
+    {"type": "sensor", "x": 16, "y": 396, "w": 219, "h": 124, "sensor": "vrm_temp", "size": 40, "bar_min": 30, "bar_max": 95, "bar_rule": "temp"},
+    {"type": "sensor", "x": 245, "y": 396, "w": 219, "h": 124, "sensor": "gpu_fan_pct", "size": 40},
+    {"type": "sensor", "x": 16, "y": 530, "w": 219, "h": 124, "sensor": "cpu_fan", "size": 40, "bar_max": 2000, "bar_rule": "none"},
+    {"type": "sensor", "x": 245, "y": 530, "w": 219, "h": 124, "sensor": "pump", "size": 40, "bar_max": 3500, "bar_rule": "none"},
+    {"type": "sensor", "x": 16, "y": 664, "w": 448, "h": 116, "sensor": "sys_fan", "bar_max": 2000, "bar_rule": "none"}
+  ]
+}

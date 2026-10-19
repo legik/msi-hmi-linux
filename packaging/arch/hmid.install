@@ -1,0 +1,19 @@
+post_install() {
+    echo ">>> Enable the panel service:   systemctl enable --now hmid-helper hmid"
+    echo ">>> hmid runs as its own user 'hmid'; hmid-helper does the few things that need root"
+    echo ">>> Settings: /etc/hmid.json (example in /usr/share/doc/msi-hmi-linux/)"
+    echo ">>> Fan readings on MSI boards: see /usr/share/doc/msi-hmi-linux/docs/HARDWARE.md"
+    echo ">>> Screens: built-in layouts (hmictl layouts); your own go to /etc/hmid/layouts (hmictl customize <name>)"
+}
+
+post_upgrade() {
+    systemctl daemon-reload >/dev/null 2>&1
+    systemctl enable hmid-helper.service >/dev/null 2>&1 || true
+    if systemctl is-active -q hmid.service; then
+        systemctl restart hmid-helper.service hmid.service >/dev/null 2>&1 || true
+    fi
+}
+
+pre_remove() {
+    systemctl disable --now hmid.service hmid-helper.service >/dev/null 2>&1 || true
+}

@@ -1,0 +1,21 @@
+{
+  "comment": "Minimal: a big stacked clock for an always-on panel, with three quiet readings at the bottom. No sources, works everywhere.",
+  "refresh": 10,
+  "colors": {"glow": null},
+  "widgets": [
+    {"type": "text", "x": 240, "y": 70, "text": "{time:%H}", "size": 230, "align": "center", "spacing": -6},
+    {"type": "text", "x": 240, "y": 300, "text": "{time:%M}", "size": 230, "align": "center", "spacing": -6, "color": "accent"},
+    {"type": "text", "x": 240, "y": 560, "text": "{time:%A}", "size": 20, "align": "center", "color": "secondary", "transform": "upper", "spacing": 5},
+    {"type": "text", "x": 240, "y": 592, "text": "{time:%d %B}", "size": 26, "align": "center", "bold": false},
+
+    {"type": "text", "x": 88, "y": 680, "text": "CPU", "size": 14, "align": "center", "color": "secondary", "spacing": 2},
+    {"type": "text", "x": 88, "y": 700, "text": "{cpu_temp:.0f}°", "size": 36, "align": "center", "value": "cpu_temp", "rule": "temp"},
+    {"type": "bar", "x": 40, "y": 754, "w": 96, "value": "cpu_temp", "min": 30, "max": 95, "rule": "none"},
+    {"type": "text", "x": 240, "y": 680, "text": "GPU", "size": 14, "align": "center", "color": "secondary", "spacing": 2},
+    {"type": "text", "x": 240, "y": 700, "text": "{gpu_temp:.0f}°", "size": 36, "align": "center", "value": "gpu_temp", "rule": "temp"},
+    {"type": "bar", "x": 192, "y": 754, "w": 96, "value": "gpu_temp", "min": 30, "max": 95, "rule": "none"},
+    {"type": "text", "x": 392, "y": 680, "text": "RAM", "size": 14, "align": "center", "color": "secondary", "spacing": 2},
+    {"type": "text", "x": 392, "y": 700, "text": "{ram_pct:.0f}%", "size": 36, "align": "center"},
+    {"type": "bar", "x": 344, "y": 754, "w": 96, "value": "ram_pct", "rule": "none"}
+  ]
+}

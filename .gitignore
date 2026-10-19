@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# makepkg output (packaging/arch)
+packaging/arch/pkg/
+packaging/arch/src/
+packaging/arch/*.pkg.tar.*
+packaging/arch/*.tar.gz
+
+# editors
+.idea/
+.vscode/
+*.swp
+*~
+
+# never commit captures or anything taken from MSI's software
+*.pcap
+*.pcapng
+*.rep
+*.il
+il/
+captures/
+*.dll
+*.exe
+*.ini
+mystic_dump*.txt
+
+# logs, previews and media made while testing
+*.log
+/*.png
+preview*.png
+*.avi
+*.mp4
+!src/hmid/data/bg_default.mp4
+*.gif
+!docs/images/*.gif
+
+# your own config (examples/hmid.json is the shipped one)
+/hmid.json

@@ -1,0 +1,45 @@
+[Unit]
+Description=MSI HMI 2.0 front-panel display
+Documentation=https://github.com/legik/msi-hmi-linux
+# Start as early as possible: the panel keeps resetting itself until a host talks to it.
+DefaultDependencies=no
+After=systemd-udevd.service systemd-udev-trigger.service systemd-sysusers.service local-fs.target hmid-helper.service
+Wants=hmid-helper.service
+Before=sysinit.target shutdown.target
+Conflicts=shutdown.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/hmid
+Environment=PYTHONUNBUFFERED=1
+Restart=always
+RestartSec=2
+# on stop the service shows the panel's shutdown / restart screen
+TimeoutStopSec=6
+KillSignal=SIGTERM
+
+# its own user: access to the panel and the Mystic Light controller comes from the udev
+# rule (70-hmid.rules); what needs root is done by hmid-helper.service
+User=hmid
+Group=hmid
+RuntimeDirectory=hmid
+RuntimeDirectoryMode=0750
+StateDirectory=hmid
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+ProtectSystem=full
+ProtectHome=read-only
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=sysinit.target

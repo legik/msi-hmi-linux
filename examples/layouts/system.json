@@ -1,0 +1,50 @@
+{
+  "comment": "System: host name, kernel and uptime, disk space, pending updates and installed packages (Arch/Manjaro: checkupdates is in pacman-contrib), load average. Commands: copy the file to /etc/hmid/layouts (root-owned) first. On other distros replace the two pacman commands.",
+  "refresh": 5,
+  "sources": {
+    "host":    {"type": "file", "path": "/proc/sys/kernel/hostname", "every": 3600},
+    "kernel":  {"type": "file", "path": "/proc/sys/kernel/osrelease", "every": 3600},
+    "uptime":  {"type": "command", "run": "uptime -p | sed 's/^up //'", "every": 60},
+    "root_pct":  {"type": "command", "run": "df --output=pcent / | tail -1 | tr -dc 0-9", "every": 300},
+    "root_free": {"type": "command", "run": "df -h --output=avail / | tail -1 | tr -d ' '", "every": 300},
+    "home_pct":  {"type": "command", "run": "df --output=pcent /home | tail -1 | tr -dc 0-9", "every": 300},
+    "home_free": {"type": "command", "run": "df -h --output=avail /home | tail -1 | tr -d ' '", "every": 300},
+    "updates": {"type": "command", "run": "checkupdates 2>/dev/null | wc -l", "every": 3600, "timeout": 60},
+    "pkgs":    {"type": "command", "run": "pacman -Qq | wc -l", "every": 3600},
+    "load":    {"type": "command", "run": "printf '{\"m1\": %s, \"m5\": %s, \"m15\": %s}' $(cut -d' ' -f1-3 /proc/loadavg)", "every": 5}
+  },
+  "widgets": [
+    {"type": "card", "x": 16, "y": 16, "w": 448, "h": 150},
+    {"type": "text", "x": 34, "y": 34, "text": "{host}", "size": 44, "color": "value", "max_width": 300},
+    {"type": "text", "x": 446, "y": 44, "text": "{time:%H:%M}", "size": 30, "align": "right"},
+    {"type": "text", "x": 34, "y": 96, "text": "Linux {kernel}", "size": 18, "bold": false, "color": "secondary", "max_width": 412},
+    {"type": "text", "x": 34, "y": 126, "text": "up {uptime}", "size": 18, "bold": false, "max_width": 412},
+
+    {"type": "card", "x": 16, "y": 176, "w": 448, "h": 200},
+    {"type": "text", "x": 34, "y": 192, "text": "STORAGE", "color": "header"},
+    {"type": "text", "x": 34, "y": 232, "text": "/", "size": 22},
+    {"type": "text", "x": 446, "y": 235, "text": "{root_free} free  ·  {root_pct}%", "size": 18, "align": "right", "bold": false, "color": "secondary"},
+    {"type": "bar", "x": 34, "y": 272, "w": 412, "value": "root_pct", "warn": 80, "crit": 92},
+    {"type": "text", "x": 34, "y": 300, "text": "/home", "size": 22},
+    {"type": "text", "x": 446, "y": 303, "text": "{home_free} free  ·  {home_pct}%", "size": 18, "align": "right", "bold": false, "color": "secondary"},
+    {"type": "bar", "x": 34, "y": 340, "w": 412, "value": "home_pct", "warn": 80, "crit": 92},
+
+    {"type": "card", "x": 16, "y": 386, "w": 219, "h": 130},
+    {"type": "text", "x": 32, "y": 400, "text": "UPDATES", "size": 15, "color": "header"},
+    {"type": "text", "x": 32, "y": 430, "text": "{updates:.0f}", "size": 48, "value": "updates", "warn": 20, "crit": 100},
+    {"type": "text", "x": 32, "y": 490, "text": "pending", "size": 15, "bold": false, "color": "secondary"},
+    {"type": "card", "x": 245, "y": 386, "w": 219, "h": 130},
+    {"type": "text", "x": 261, "y": 400, "text": "PACKAGES", "size": 15, "color": "header"},
+    {"type": "text", "x": 261, "y": 430, "text": "{pkgs:,.0f}", "size": 48},
+    {"type": "text", "x": 261, "y": 490, "text": "installed", "size": 15, "bold": false, "color": "secondary"},
+
+    {"type": "card", "x": 16, "y": 526, "w": 448, "h": 124},
+    {"type": "text", "x": 34, "y": 542, "text": "LOAD AVERAGE", "color": "header"},
+    {"type": "text", "x": 446, "y": 545, "text": "5 min {load.m5:.2f}  ·  15 min {load.m15:.2f}", "size": 17, "align": "right", "bold": false, "color": "secondary"},
+    {"type": "text", "x": 34, "y": 572, "text": "{load.m1:.2f}", "size": 46},
+    {"type": "graph", "x": 200, "y": 578, "w": 246, "h": 54, "value": "load.m1", "seconds": 900, "min": 0},
+
+    {"type": "sensor", "x": 16, "y": 660, "w": 219, "h": 120, "sensor": "cpu_load", "size": 40},
+    {"type": "sensor", "x": 245, "y": 660, "w": 219, "h": 120, "sensor": "ram_used", "label": "RAM", "size": 40}
+  ]
+}

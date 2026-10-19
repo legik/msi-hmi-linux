@@ -1,0 +1,45 @@
+{
+  "comment": "Open-source project: stars (with a 7-day graph while hmid runs), forks, open issues, watchers, the latest release, and the last CI run coloured by its result. GitHub's API needs no key for this (60 requests an hour). Replace legik/REPO in the three urls.",
+  "refresh": 30,
+  "sources": {
+    "repo":    {"type": "http", "every": 900,  "url": "https://api.github.com/repos/legik/REPO"},
+    "release": {"type": "http", "every": 3600, "url": "https://api.github.com/repos/legik/REPO/releases/latest"},
+    "ci":      {"type": "http", "every": 600,  "url": "https://api.github.com/repos/legik/REPO/actions/runs?per_page=1"}
+  },
+  "widgets": [
+    {"type": "card", "x": 16, "y": 16, "w": 448, "h": 140},
+    {"type": "text", "x": 34, "y": 32, "text": "{repo.full_name}", "size": 22, "color": "header", "max_width": 412},
+    {"type": "text", "x": 34, "y": 66, "text": "{repo.description}", "size": 17, "bold": false, "color": "secondary", "max_width": 412},
+    {"type": "text", "x": 34, "y": 108, "text": "{release.tag_name}", "size": 26, "when": "release.tag_name"},
+    {"type": "text", "x": 446, "y": 114, "text": "released {release.published_at|ago}", "size": 17, "align": "right", "bold": false, "color": "secondary", "when": "release.tag_name"},
+
+    {"type": "card", "x": 16, "y": 166, "w": 448, "h": 240},
+    {"type": "text", "x": 34, "y": 182, "text": "★  STARS", "color": "header"},
+    {"type": "text", "x": 446, "y": 185, "text": "last push {repo.pushed_at|ago}", "size": 17, "align": "right", "bold": false, "color": "secondary"},
+    {"type": "text", "x": 240, "y": 214, "text": "{repo.stargazers_count:,.0f}", "size": 96, "align": "center", "color": "value"},
+    {"type": "graph", "x": 16, "y": 346, "w": 448, "h": 60, "value": "repo.stargazers_count", "seconds": 604800, "min": "repo.stargazers_count|mul(0.97)", "clip": true},
+    {"type": "card", "x": 16, "y": 166, "w": 448, "h": 240, "fill": false},
+
+    {"type": "card", "x": 16, "y": 416, "w": 142, "h": 126},
+    {"type": "text", "x": 32, "y": 430, "text": "FORKS", "size": 15, "color": "header"},
+    {"type": "text", "x": 32, "y": 466, "text": "{repo.forks_count|compact}", "size": 42},
+    {"type": "card", "x": 169, "y": 416, "w": 142, "h": 126},
+    {"type": "text", "x": 185, "y": 430, "text": "OPEN ISSUES", "size": 15, "color": "header"},
+    {"type": "text", "x": 185, "y": 466, "text": "{repo.open_issues_count|compact}", "size": 42, "value": "repo.open_issues_count", "warn": 50, "crit": 200},
+    {"type": "card", "x": 322, "y": 416, "w": 142, "h": 126},
+    {"type": "text", "x": 338, "y": 430, "text": "WATCHERS", "size": 15, "color": "header"},
+    {"type": "text", "x": 338, "y": 466, "text": "{repo.subscribers_count|compact}", "size": 42},
+
+    {"type": "card", "x": 16, "y": 552, "w": 448, "h": 228},
+    {"type": "text", "x": 34, "y": 568, "text": "LAST CI RUN", "color": "header"},
+    {"type": "text", "x": 446, "y": 571, "text": "{ci.workflow_runs.0.name}", "size": 17, "align": "right", "bold": false, "color": "secondary", "max_width": 260},
+    {"type": "text", "x": 34, "y": 604, "text": "✔ PASSING", "size": 44, "color": "accent", "when": "ci.workflow_runs.0.conclusion=success"},
+    {"type": "text", "x": 34, "y": 604, "text": "✖ FAILING", "size": 44, "color": "crit", "when": "ci.workflow_runs.0.conclusion=failure"},
+    {"type": "text", "x": 34, "y": 604, "text": "● RUNNING", "size": 44, "color": "warn", "when": "ci.workflow_runs.0.status=in_progress"},
+    {"type": "text", "x": 34, "y": 604, "text": "{ci.workflow_runs.0.conclusion|upper}", "size": 44, "color": "secondary", "when": "ci.workflow_runs.0.conclusion=cancelled"},
+    {"type": "text", "x": 34, "y": 674, "text": "{ci.workflow_runs.0.head_commit.message|line(0)}", "size": 20, "bold": false, "max_width": 412},
+    {"type": "text", "x": 34, "y": 712, "text": "{ci.workflow_runs.0.head_branch}  ·  {ci.workflow_runs.0.actor.login}", "size": 17, "bold": false, "color": "secondary", "max_width": 300},
+    {"type": "text", "x": 446, "y": 712, "text": "{ci.workflow_runs.0.updated_at|ago}", "size": 17, "align": "right", "bold": false, "color": "secondary"},
+    {"type": "text", "x": 34, "y": 744, "text": "#{ci.workflow_runs.0.run_number}", "size": 17, "color": "secondary"}
+  ]
+}

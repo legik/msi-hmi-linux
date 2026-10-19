@@ -1,0 +1,23 @@
+[Unit]
+Description=MSI HMI panel service - root helper (touch actions, layout commands)
+Documentation=https://github.com/legik/msi-hmi-linux/blob/main/docs/ARCHITECTURE.md#privileges
+# hmid runs as its own user; this small part does the few things that need root, for
+# references hmid sends ("action 242"), looked up here in root-owned files.
+DefaultDependencies=no
+After=local-fs.target systemd-sysusers.service
+Before=sysinit.target shutdown.target
+Conflicts=shutdown.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/hmid-helper
+Environment=PYTHONUNBUFFERED=1
+# group hmid: the socket in /run/hmid-helper is open to root and the hmid user only
+Group=hmid
+RuntimeDirectory=hmid-helper
+RuntimeDirectoryMode=0750
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=sysinit.target

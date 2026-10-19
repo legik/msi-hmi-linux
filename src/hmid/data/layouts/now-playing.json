@@ -1,0 +1,31 @@
+{
+  "comment": "Now playing: album cover, title, artist and album, and the track's progress. Works with any player that supports MPRIS (Spotify, browsers, mpv, ...); with several open it shows the one that is playing, else a paused one. Needs playerctl. The command runs as the logged-in desktop user (\"as\": \"user\"), so there is nothing to set up. player lines: 0 status, 1 position (us), 2 length (us), 3 position, 4 length, 5 title, 6 artist, 7 album, 8 player, 9 cover link.",
+  "refresh": 2,
+  "sources": {
+    "player": {"type": "command", "as": "user", "every": 2, "run": "pick=; for want in Playing Paused; do for p in $(playerctl -l 2>/dev/null); do [ \"$(playerctl -p \"$p\" status 2>/dev/null)\" = \"$want\" ] && pick=$p && break 2; done; done; [ -n \"$pick\" ] && playerctl -p \"$pick\" metadata --format \"$(printf '{{status}}\\n{{position}}\\n{{mpris:length}}\\n{{duration(position)}}\\n{{duration(mpris:length)}}\\n{{title}}\\n{{artist}}\\n{{album}}\\n{{playerName}}\\n{{mpris:artUrl}}')\" 2>/dev/null || true"}
+  },
+  "widgets": [
+    {"type": "text", "x": 24, "y": 22, "text": "NOW PLAYING", "size": 22, "color": "header", "spacing": 3},
+    {"type": "text", "x": 456, "y": 18, "text": "{time:%H:%M}", "size": 26, "align": "right"},
+    {"type": "divider", "y": 62},
+
+    {"type": "card", "x": 60, "y": 82, "w": 360, "h": 360, "comment": "shown until the cover has loaded, and for players without covers"},
+    {"type": "text", "x": 240, "y": 168, "text": "♫", "size": 150, "align": "center", "color": "accent"},
+    {"type": "image", "x": 60, "y": 82, "w": 360, "h": 360, "path": "{player|line(9)}", "fit": "cover", "radius": 14, "when": "player|line(9)"},
+    {"type": "card", "x": 60, "y": 82, "w": 360, "h": 360, "fill": false, "when": "player|line(9)"},
+
+    {"type": "text", "x": 240, "y": 466, "text": "{player|line(5)}", "size": 32, "align": "center", "max_width": 440, "when": "player"},
+    {"type": "text", "x": 240, "y": 512, "text": "{player|line(6)}", "size": 22, "align": "center", "color": "header", "max_width": 440, "when": "player"},
+    {"type": "text", "x": 240, "y": 548, "text": "{player|line(7)}", "size": 17, "align": "center", "bold": false, "color": "secondary", "max_width": 440, "when": "player"},
+    {"type": "text", "x": 240, "y": 490, "text": "nothing playing", "size": 26, "align": "center", "bold": false, "color": "secondary", "when": "!player"},
+
+    {"type": "card", "x": 16, "y": 598, "w": 448, "h": 182},
+    {"type": "text", "x": 34, "y": 614, "text": "▶  PLAYING", "size": 17, "color": "accent", "spacing": 2, "when": "player|line(0)=Playing"},
+    {"type": "text", "x": 34, "y": 614, "text": "❚❚  PAUSED", "size": 17, "color": "secondary", "spacing": 2, "when": "player|line(0)=Paused"},
+    {"type": "text", "x": 34, "y": 614, "text": "STOPPED", "size": 17, "color": "secondary", "spacing": 2, "when": "!player"},
+    {"type": "text", "x": 446, "y": 616, "text": "{player|line(8)}", "size": 15, "align": "right", "bold": false, "color": "secondary", "transform": "upper", "spacing": 2, "when": "player"},
+    {"type": "text", "x": 34, "y": 652, "text": "{player|line(3)}", "size": 54, "color": "value", "suffix": "/ {player|line(4)}", "suffix_size": 24, "suffix_gap": 10, "when": "player"},
+    {"type": "text", "x": 34, "y": 652, "text": "–:––", "size": 54, "color": "secondary", "when": "!player"},
+    {"type": "bar", "x": 34, "y": 740, "w": 412, "value": "player|line(1)", "max": "player|line(2)", "rule": "none"}
+  ]
+}

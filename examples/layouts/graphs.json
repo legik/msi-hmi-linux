@@ -1,0 +1,39 @@
+{
+  "comment": "History: CPU and GPU load, temperature and power as two lines per card over 10 minutes, and network download. Two graphs in one card are drawn on top of each other: the second one without fill and in another colour.",
+  "refresh": 3,
+  "widgets": [
+    {"type": "text", "x": 24, "y": 22, "text": "LAST 10 MINUTES", "size": 22, "color": "header", "spacing": 3},
+    {"type": "text", "x": 456, "y": 18, "text": "{time:%H:%M}", "size": 26, "align": "right"},
+    {"type": "divider", "y": 62},
+
+    {"type": "card", "x": 16, "y": 76, "w": 448, "h": 168},
+    {"type": "text", "x": 34, "y": 92, "text": "LOAD", "color": "header"},
+    {"type": "text", "x": 300, "y": 92, "text": "CPU {cpu_load:.0f}%", "size": 18, "align": "right", "color": "accent"},
+    {"type": "text", "x": 446, "y": 92, "text": "GPU {gpu_load:.0f}%", "size": 18, "align": "right", "color": "warn"},
+    {"type": "graph", "x": 16, "y": 130, "w": 448, "h": 114, "value": "cpu_load", "seconds": 600, "min": 0, "max": 100, "clip": true},
+    {"type": "graph", "x": 16, "y": 130, "w": 448, "h": 114, "value": "gpu_load", "seconds": 600, "min": 0, "max": 100, "clip": true, "fill": false, "color": "warn"},
+    {"type": "card", "x": 16, "y": 76, "w": 448, "h": 168, "fill": false},
+
+    {"type": "card", "x": 16, "y": 254, "w": 448, "h": 168},
+    {"type": "text", "x": 34, "y": 270, "text": "TEMPERATURE", "color": "header"},
+    {"type": "text", "x": 300, "y": 270, "text": "CPU {cpu_temp:.0f}°", "size": 18, "align": "right", "color": "accent"},
+    {"type": "text", "x": 446, "y": 270, "text": "GPU {gpu_temp:.0f}°", "size": 18, "align": "right", "color": "warn"},
+    {"type": "graph", "x": 16, "y": 308, "w": 448, "h": 114, "value": "cpu_temp", "seconds": 600, "min": 30, "max": 100, "clip": true},
+    {"type": "graph", "x": 16, "y": 308, "w": 448, "h": 114, "value": "gpu_temp", "seconds": 600, "min": 30, "max": 100, "clip": true, "fill": false, "color": "warn"},
+    {"type": "card", "x": 16, "y": 254, "w": 448, "h": 168, "fill": false},
+
+    {"type": "card", "x": 16, "y": 432, "w": 448, "h": 168},
+    {"type": "text", "x": 34, "y": 448, "text": "POWER", "color": "header"},
+    {"type": "text", "x": 300, "y": 448, "text": "CPU {cpu_power:.0f} W", "size": 18, "align": "right", "color": "accent"},
+    {"type": "text", "x": 446, "y": 448, "text": "GPU {gpu_power:.0f} W", "size": 18, "align": "right", "color": "warn"},
+    {"type": "graph", "x": 16, "y": 486, "w": 448, "h": 114, "value": "cpu_power", "seconds": 600, "min": 0, "max": "gpu_power_limit", "clip": true},
+    {"type": "graph", "x": 16, "y": 486, "w": 448, "h": 114, "value": "gpu_power", "seconds": 600, "min": 0, "max": "gpu_power_limit", "clip": true, "fill": false, "color": "warn"},
+    {"type": "card", "x": 16, "y": 432, "w": 448, "h": 168, "fill": false},
+
+    {"type": "card", "x": 16, "y": 610, "w": 448, "h": 170},
+    {"type": "text", "x": 34, "y": 626, "text": "DOWNLOAD", "color": "header"},
+    {"type": "text", "x": 446, "y": 626, "text": "{download}", "size": 18, "align": "right", "color": "accent"},
+    {"type": "graph", "x": 16, "y": 664, "w": 448, "h": 116, "value": "net_down", "seconds": 600, "min": 0, "clip": true},
+    {"type": "card", "x": 16, "y": 610, "w": 448, "h": 170, "fill": false}
+  ]
+}

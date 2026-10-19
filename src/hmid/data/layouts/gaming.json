@@ -1,0 +1,29 @@
+{
+  "comment": "Gaming: FPS with an edge-to-edge frametime graph while a game runs (MangoHud), 2x3 grid below (temperatures, loads, VRAM, RAM).",
+  "refresh": 2,
+  "widgets": [
+    {"type": "text", "x": 24, "y": 22, "text": "{game}", "size": 22, "color": "header", "transform": "upper", "spacing": 2, "max_width": 330, "when": "fps"},
+    {"type": "text", "x": 24, "y": 22, "text": "READY", "size": 22, "color": "header", "spacing": 2, "when": "!fps"},
+    {"type": "text", "x": 456, "y": 18, "text": "{time:%H:%M}", "size": 26, "align": "right"},
+    {"type": "divider", "y": 62},
+
+    {"type": "card", "x": 16, "y": 76, "w": 448, "h": 300},
+    {"type": "text", "x": 240, "y": 96, "text": "{fps:.0f}", "size": 120, "align": "center", "color": "value", "when": "fps"},
+    {"type": "text", "x": 240, "y": 238, "text": "FPS  ·  {frametime:.1f} ms", "size": 20, "align": "center", "bold": false, "color": "secondary", "when": "fps"},
+    {"type": "text", "x": 240, "y": 160, "text": "no game running", "size": 24, "align": "center", "bold": false, "color": "secondary", "when": "!fps"},
+    {"type": "graph", "x": 16, "y": 280, "w": 448, "h": 96, "value": "frametime", "seconds": 120, "min": 0, "clip": true, "when": "fps"},
+    {"type": "card", "x": 16, "y": 76, "w": 448, "h": 300, "fill": false, "comment": "border again, on top of the graph"},
+
+    {"type": "sensor", "x": 16, "y": 388, "w": 219, "h": 124, "sensor": "cpu_temp", "size": 40, "bar_min": 30, "bar_max": 95, "bar_rule": "temp"},
+    {"type": "sensor", "x": 245, "y": 388, "w": 219, "h": 124, "sensor": "gpu_temp", "size": 40, "bar_min": 30, "bar_max": 95, "bar_rule": "temp"},
+    {"type": "sensor", "x": 16, "y": 522, "w": 219, "h": 124, "sensor": "cpu_load", "size": 40},
+    {"type": "sensor", "x": 245, "y": 522, "w": 219, "h": 124, "sensor": "gpu_load", "size": 40},
+
+    {"type": "card", "x": 16, "y": 656, "w": 219, "h": 124},
+    {"type": "text", "x": 32, "y": 668, "text": "VRAM", "size": 15, "color": "header"},
+    {"type": "text", "x": 32, "y": 704, "text": "{vram_used:.1f}", "size": 40, "color": "text", "suffix": "/ {vram_total:.0f} GB", "suffix_size": 22, "suffix_gap": 4},
+    {"type": "bar", "x": 32, "y": 760, "w": 187, "value": "vram_used", "max": "vram_total", "rule": "none"},
+
+    {"type": "sensor", "x": 245, "y": 656, "w": 219, "h": 124, "sensor": "ram_used", "label": "RAM", "size": 40}
+  ]
+}

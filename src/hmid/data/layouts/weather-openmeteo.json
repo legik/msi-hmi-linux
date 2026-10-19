@@ -1,0 +1,38 @@
+{
+  "comment": "Weather from Open-Meteo (no API key; use weather.json if open-meteo.com is blocked on your network), updated hourly; screen redrawn once a minute. Change latitude/longitude in both URLs and the city name below.",
+  "refresh": 60,
+  "sources": {
+    "weather": {"type": "http", "every": 3600, "url": "https://api.open-meteo.com/v1/forecast?latitude=55.7558&longitude=37.6173&current=temperature_2m,apparent_temperature,relative_humidity_2m,surface_pressure,wind_speed_10m,wind_direction_10m,weather_code,is_day&hourly=temperature_2m,uv_index&daily=temperature_2m_max,temperature_2m_min,sunset&timezone=auto&forecast_days=1"},
+    "aqi": {"type": "http", "every": 3600, "json": "current.european_aqi", "url": "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=55.7558&longitude=37.6173&current=european_aqi&timezone=auto"}
+  },
+  "widgets": [
+    {"type": "text", "x": 24, "y": 22, "text": "Moscow", "size": 22, "color": "header", "transform": "upper", "spacing": 2},
+    {"type": "text", "x": 456, "y": 18, "text": "{time:%H:%M}", "size": 26, "align": "right"},
+    {"type": "divider", "y": 62},
+    {"type": "card", "x": 16, "y": 76, "w": 448, "h": 340},
+    {"type": "icon", "x": 36, "y": 100, "size": 104, "icon": "{weather.current|wmo_icon}"},
+    {"type": "text", "x": 160, "y": 114, "text": "{weather.current.temperature_2m:.0f}°C", "size": 72, "color": "value"},
+    {"type": "text", "x": 40, "y": 226, "size": 16, "bold": false, "color": "secondary", "max_width": 400, "text": "{weather.current.weather_code|wmo} · FEELS {weather.current.apparent_temperature:.0f}°C · H:{weather.daily.temperature_2m_max.0:.0f}° L:{weather.daily.temperature_2m_min.0:.0f}°"},
+    {"type": "graph", "x": 16, "y": 262, "w": 448, "h": 154, "series": "weather.hourly.temperature_2m", "marker": "weather.hourly.time|hour_index", "clip": true},
+    {"type": "card", "x": 16, "y": 76, "w": 448, "h": 340, "fill": false, "comment": "border again, on top of the graph"},
+    {"type": "card", "x": 16, "y": 428, "w": 219, "h": 171},
+    {"type": "text", "x": 32, "y": 440, "text": "HUMIDITY", "size": 15, "color": "header"},
+    {"type": "text", "x": 32, "y": 500, "text": "{weather.current.relative_humidity_2m:.0f}", "size": 40, "color": "value", "suffix": "%"},
+    {"type": "bar", "x": 32, "y": 579, "w": 187, "value": "weather.current.relative_humidity_2m", "max": 100, "rule": "none"},
+    {"type": "card", "x": 245, "y": 428, "w": 219, "h": 171},
+    {"type": "text", "x": 261, "y": 440, "text": "WIND", "size": 15, "color": "header"},
+    {"type": "text", "x": 448, "y": 442, "text": "{weather.current.wind_direction_10m|compass}", "size": 13, "align": "right", "bold": false, "color": "secondary"},
+    {"type": "text", "x": 261, "y": 500, "text": "{weather.current.wind_speed_10m:.0f}", "size": 40, "color": "value", "suffix": "km/h"},
+    {"type": "bar", "x": 261, "y": 579, "w": 187, "value": "weather.current.wind_speed_10m", "max": 60, "rule": "none"},
+    {"type": "card", "x": 16, "y": 609, "w": 219, "h": 171},
+    {"type": "text", "x": 32, "y": 621, "text": "UV INDEX", "size": 15, "color": "header"},
+    {"type": "text", "x": 219, "y": 623, "text": "AQI: {aqi:.0f}", "size": 13, "align": "right", "bold": false, "color": "secondary"},
+    {"type": "text", "x": 32, "y": 681, "text": "{weather.hourly.uv_index|now:.0f}", "size": 40, "color": "value", "suffix": "{weather.hourly.uv_index|now|uv_level}", "value": "weather.hourly.uv_index|now", "warn": 3, "crit": 6},
+    {"type": "bar", "x": 32, "y": 760, "w": 187, "value": "weather.hourly.uv_index|now", "max": 11, "warn": 3, "crit": 6},
+    {"type": "card", "x": 245, "y": 609, "w": 219, "h": 171},
+    {"type": "text", "x": 261, "y": 621, "text": "PRESSURE", "size": 15, "color": "header"},
+    {"type": "text", "x": 448, "y": 623, "text": "SUNSET {weather.daily.sunset.0|time}", "size": 13, "align": "right", "bold": false, "color": "secondary"},
+    {"type": "text", "x": 261, "y": 681, "text": "{weather.current.surface_pressure:.0f}", "size": 40, "color": "value", "suffix": "hPa"},
+    {"type": "bar", "x": 261, "y": 760, "w": 187, "value": "weather.current.surface_pressure", "min": 980, "max": 1040, "rule": "none"}
+  ]
+}
